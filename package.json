@@ -1,0 +1,57 @@
+{
+  "name": "prello-auth",
+  "version": "0.1.0",
+  "description": "Prello's authentification applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awi2017-option1group1/Prello-auth.git"
+  },
+  "author": "Photon Team",
+  "license": "MIT",
+  "engines": {
+    "node": "8.3.0"
+  },
+  "scripts": {
+    "start": "node dist/src/server.js",
+    "start:dev": "npm run build && npm run watch",
+    "build": "npm run build-ts && npm run tslint",
+    "serve": "nodemon dist/server.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve\"",
+    "test": "jest --forceExit",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "jest": {
+    "globals": {
+      "__TS_CONFIG__": "tsconfig.json"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "./node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "**/test/**/*.test.(ts|js)"
+    ],
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.16.5",
+    "@types/jest": "^19.2.2",
+    "@types/node": "^7.0.43",
+    "concurrently": "^3.5.0",
+    "jest": "^19.0.2",
+    "nodemon": "^1.12.1",
+    "supertest": "^2.0.1",
+    "ts-jest": "^19.0.8",
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3"
+  }
+}
