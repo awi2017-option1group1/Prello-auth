@@ -3,20 +3,20 @@ import { Entity, Column, PrimaryColumn, ManyToOne } from 'typeorm'
 import { OAuth2Client } from './Client'
 import { OAuth2User } from './User'
 
-@Entity('oauth_access_token')
-export class OAuth2AccessToken {
+@Entity('oauth_refresh_token')
+export class OAuth2RefreshToken {
 
     @PrimaryColumn({
-        name: 'access_token',
+        name: 'refresh_token',
         type: 'varchar'
     })
-    accessToken: string
+    refreshToken: string
 
     @Column({
-        name: 'access_token_expires_at',
+        name: 'refresh_token_expires_at',
         type: 'date'
     })
-    accessTokenExpiresAt: Date
+    refreshTokenExpiresAt: Date
 
     @Column({
         name: 'scope',

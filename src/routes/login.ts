@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { config } from '../config'
+import { ENV } from '../server'
 
 import { UserFacade } from '../bl/userFacade'
 
@@ -15,8 +16,12 @@ export class LoginController {
     static async postLogin(req: express.Request, res: express.Response, next: express.NextFunction) {
         const user = await UserFacade.getByEmailAndPassword(req.body.username, req.body.password)
         if (user) {
-            // TODO: set an encrypted string ??? + add security to the cookie       
-            res.cookie(config.loginCookieName, user.id)
+            // TODO: set an encrypted string ???   
+            res.cookie(config.loginCookieName, user.id, { 
+                httpOnly: true, 
+                sameSite: true, 
+                secure: ENV !== 'development' 
+            })
             return res.redirect(
                 `/${req.query.redirect}?client_id=${req.query.client_id}&redirect_uri=${ req.query.redirect_uri}`
             )

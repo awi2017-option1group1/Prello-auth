@@ -8,6 +8,7 @@ class Cache implements BaseModel, RequestAuthenticationModel, AuthorizationCodeM
 
     private clients: OAuth2Client[] = [
         { 
+            cid: 1,
             id: '1',
             name: 'App 1',
             clientSecret: 'abc123',
@@ -16,6 +17,7 @@ class Cache implements BaseModel, RequestAuthenticationModel, AuthorizationCodeM
             grants: ['authorization_code'] 
         },
         { 
+            cid: 2,
             id: '2',
             name: 'App 2',
             clientSecret: 'aaa',
@@ -26,16 +28,18 @@ class Cache implements BaseModel, RequestAuthenticationModel, AuthorizationCodeM
     ]
     private users: OAuth2User[] = [
         {
+            uid: 1,
             id: '1',
             email: 'admin',
             password: 'admin',
-            name: 'Admin'
+            pseudo: 'Admin'
         },
         {
+            uid: 2,
             id: '2',
             email: 'user',
             password: 'user',
-            name: 'User'
+            pseudo: 'User'
         }
     ]
     private tokens: Token[] = []
