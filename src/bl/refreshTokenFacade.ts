@@ -1,9 +1,13 @@
-import { CACHE } from '../InMemoryCache'
+import { getRepository } from 'typeorm'
+
+import { OAuth2RefreshToken } from '../db/RefreshToken'
 
 export class RefreshTokenFacade {
 
     static async getById(id: string) {
-        return CACHE.getRefreshToken(id)
+        return await getRepository(OAuth2RefreshToken).findOne({ 
+            refreshToken: id 
+        }).then(token => token!)
     }
 
 }

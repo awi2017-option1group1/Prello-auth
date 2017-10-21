@@ -1,5 +1,5 @@
-declare namespace core {
-    export interface Express {
-        oauth: any
+declare namespace Express {
+    export interface Request {
+        token: any
     }
 }

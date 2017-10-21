@@ -8,25 +8,32 @@ import { UserFacade } from '../bl/userFacade'
 export class LoginController {
     
     static getLogin(req: express.Request, res: express.Response) {
+        if (req.cookies[config.loginCookieName]) {
+            return LoginController.redirectLogin(req, res)
+        }
+
         return res.render('login', { // views: login
-            redirect_uri: req.originalUrl
+            redirect_uri: req.originalUrl,
+            email: '',
+            errors: []
         })
     }
 
-    static async postLogin(req: express.Request, res: express.Response, next: express.NextFunction) {
-        const user = await UserFacade.getByEmailAndPassword(req.body.username, req.body.password)
+    static async postLogin(req: express.Request, res: express.Response) {
+        const user = await UserFacade.getByEmailAndPassword(req.body.email, req.body.password)
         if (user) {
-            // TODO: set an encrypted string ???   
             res.cookie(config.loginCookieName, user.id, { 
                 httpOnly: true, 
                 sameSite: true, 
                 secure: ENV !== 'development' 
             })
-            return res.redirect(
-                `/${req.query.redirect}?client_id=${req.query.client_id}&redirect_uri=${ req.query.redirect_uri}`
-            )
+            return LoginController.redirectLogin(req, res)
         } else {
-            return LoginController.getLogin(req, res)
+            return res.render('login', { // views: login
+                redirect_uri: req.originalUrl,
+                email: req.body.email || '',
+                errors: ['Invalid credentials']
+            })
         }
     }
 
@@ -34,6 +41,24 @@ export class LoginController {
         req.logout()
         res.clearCookie(config.loginCookieName)
         res.redirect('/')
+    }
+
+    private static redirectLogin(req: express.Request, res: express.Response) {
+        if (req.query.redirect) {
+            let redirect = `${req.query.redirect}`
+            if (!redirect.startsWith('/')) {
+                redirect = `/${redirect}`
+            }
+            if (req.query.client_id && req.query.redirect_uri) {
+                return res.redirect(
+                    `${redirect}?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
+                )
+            } else {
+                return res.redirect(redirect)
+            }
+        } else {
+            return res.redirect(config.loginDefaultRedirect)
+        }
     }
 
 }

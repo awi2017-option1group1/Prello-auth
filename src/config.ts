@@ -1,3 +1,4 @@
 export const config = {
-    loginCookieName: 'prello-auth'
+    loginCookieName: 'prello-auth',
+    loginDefaultRedirect: '/overview'
 }

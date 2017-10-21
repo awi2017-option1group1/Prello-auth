@@ -30,7 +30,7 @@ export class OauthController {
     }
 
     static postAuthorize(req: express.Request, res: express.Response, next: express.NextFunction) {
-        return authorizeMiddleware(res, req, next)
+        return authorizeMiddleware(req, res, next)
     }
 
     static postToken(req: express.Request, res: express.Response, next: express.NextFunction) {

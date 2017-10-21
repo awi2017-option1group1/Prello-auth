@@ -6,7 +6,7 @@ import { ClientFacade } from './bl/clientFacade'
 
 const model = {
     getAuthorizationCode: AuthorizationCodeFacade.getById,
-    saveAuthorizationCode: AuthorizationCodeFacade.create,
+    saveAuthorizationCode: AuthorizationCodeFacade.getOrCreate,
     revokeAuthorizationCode: AuthorizationCodeFacade.delete,
 
     getAccessToken: AccessTokenFacade.getById,
@@ -31,6 +31,7 @@ export const tokenMiddleware = (req, res, next) => {
         res.json(response.body)
     })
     .catch(err => {
+        console.log(err)
         res.status(err.status).json({ message: err.message })
     })
 }
@@ -38,10 +39,6 @@ export const tokenMiddleware = (req, res, next) => {
 export const authorizeMiddleware = (req, res, next) => {
     const request = new Request(req)
     const response = new Response(res)
-  
-    if (request.body.cancel) {
-        return res.redirect(request.body.redirect_uri)
-    }
 
     const options = {
         authenticateHandler: {
@@ -65,7 +62,7 @@ export const authenticateMiddleware = (req, res, next) => {
   
     oauth.authenticate(request, response)
     .then((token) => {
-        Object.assign(req, { user: token })
+        Object.assign(req, { token })
         next()
     })
     .catch(err => { 
