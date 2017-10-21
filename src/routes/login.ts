@@ -1,7 +1,9 @@
 import * as express from 'express'
 
 import { config } from '../config'
-import { ENV } from '../server'
+import { fullUrl } from '../server'
+
+import { login } from '../login'
 
 import { UserFacade } from '../bl/userFacade'
 
@@ -18,7 +20,7 @@ export class LoginController {
         }
 
         return res.render('login', { // views: login
-            redirect_uri: req.originalUrl,
+            redirect_uri: fullUrl(req),
             email: '',
             errors
         })
@@ -27,11 +29,13 @@ export class LoginController {
     static async postLogin(req: express.Request, res: express.Response) {
         const user = await UserFacade.getByEmailAndPassword(req.body.email, req.body.password)
         if (user) {
-            res.cookie(config.loginCookieName, user.id, { 
-                httpOnly: true, 
-                sameSite: true, 
-                secure: ENV !== 'development' 
-            })
+            await login(
+                {
+                    id: user.uid,
+                    email: user.email
+                },
+                res
+            )
             return LoginController.redirectLogin(req, res)
         } else {
             return res.render('login', { // views: login

@@ -35,4 +35,11 @@ export class OAuth2User {
     })
     pseudo: string
 
+    @Column({
+        name: 'token',
+        type: 'varchar',
+        nullable: true
+    })
+    token?: string
+
 }

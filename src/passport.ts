@@ -6,7 +6,7 @@ import { UserFacade } from './bl/userFacade'
 
 const CookieStrategy = require('passport-cookie').Strategy
 passport.use(new CookieStrategy({ cookieName: config.loginCookieName }, (token, done) => {
-    UserFacade.getById(token).then(
+    UserFacade.getByToken(token).then(
         user => done(null, user),
         error => done(error)
     )

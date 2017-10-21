@@ -1,5 +1,7 @@
 import * as express from 'express'
 
+import { fullUrl } from '../server'
+
 import { tokenMiddleware, authorizeMiddleware } from '../oauthMiddlewares'
 
 import { AccessTokenFacade } from '../bl/accessTokenFacade'
@@ -25,7 +27,7 @@ export class OauthController {
         return res.render('authorize', {
             user: req.user,
             client,
-            redirect_uri: req.originalUrl
+            redirect_uri: fullUrl(req)
         })
     }
 

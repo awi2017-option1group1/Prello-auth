@@ -2,10 +2,6 @@ import * as express from 'express'
 
 export class CallbackController {
 
-    static async getWebAppToken(req: express.Request, res: express.Response) {
-        return
-    }
-
     static async getZendeskToken(req: express.Request, res: express.Response) {
         return
     }

@@ -4,7 +4,7 @@ import * as rq from 'request'
 import { config } from '../config'
 
 import { GithubService } from '../oauth'
-import { setConnectionCookie } from '../cookies'
+import { login } from '../login'
 
 import { LoginController } from './login'
 import { UserFacade } from '../bl/userFacade'
@@ -22,7 +22,7 @@ interface GithubEmail {
 
 export class GithubController {
 
-    static async getGithubCallback(req: express.Request, res: express.Response) {
+    static async getGithubLogin(req: express.Request, res: express.Response) {
         res.redirect(GithubService.getAuthorizeUrl({
             redirect_uri: config.github.callbackURL,
             scope: 'user:email'
@@ -50,7 +50,7 @@ export class GithubController {
                     console.log(profile)
                 }
 
-                setConnectionCookie(
+                await login(
                     {
                         id: user!.uid,
                         email: primaryEmail

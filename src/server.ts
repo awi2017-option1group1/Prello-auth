@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
+import * as url from 'url'
 
 import { createConnection } from 'typeorm'
 import  { connectionOptions } from './connectionParams'
@@ -16,6 +17,14 @@ import { UserController } from './routes/user'
 import passport, { ensureLogin } from './passport'
 
 export const ENV = process.env.NODE_ENV || 'development'
+
+export const fullUrl = (req: express.Request) => {
+    return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: `/auth${req.originalUrl}`
+    })
+}
 
 // Set up Express and Oauth2-Node
 const app = express()
@@ -39,7 +48,7 @@ app.get('/login', LoginController.getLogin)
 app.post('/login', LoginController.postLogin)
 app.get('/logout', LoginController.getLogout)
 
-app.get('/github', GithubController.getGithubCallback)
+app.get('/github', GithubController.getGithubLogin)
 app.get('/github/callback', GithubController.getGithubLoginCallback)
 
 app.get('/tokens', authenticateMiddleware, UserController.getTokens)
@@ -47,7 +56,6 @@ app.get('/tokens', authenticateMiddleware, UserController.getTokens)
 // app.delete('/users/tokens/:clientId', LoginController.getLogin) revoke the token
 
 app.get('/token/zendesk', CallbackController.getZendeskToken)
-app.get('/token/webapp', CallbackController.getWebAppToken)
 app.get('/token/electron', CallbackController.getElectronToken)
 
 app.get('/oauth/authorize', ensureLogin(), OauthController.getAuthorize)
