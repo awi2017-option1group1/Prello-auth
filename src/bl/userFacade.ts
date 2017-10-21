@@ -10,6 +10,12 @@ export class UserFacade {
         })
     }
 
+    static async getByEmail(email: string) {
+        return await getRepository(OAuth2User).findOne({
+            email
+        })
+    }
+
     static async getByEmailAndPassword(email: string, password: string) {
         return await getRepository(OAuth2User).findOne({
             email,

@@ -12,10 +12,15 @@ export class LoginController {
             return LoginController.redirectLogin(req, res)
         }
 
+        let errors: string[] = []
+        if (req.query.oauth_error) {
+            errors.push(`Error during ${req.query.oauth_error} authentication process`)
+        }
+
         return res.render('login', { // views: login
             redirect_uri: req.originalUrl,
             email: '',
-            errors: []
+            errors
         })
     }
 
@@ -43,7 +48,7 @@ export class LoginController {
         res.redirect('/')
     }
 
-    private static redirectLogin(req: express.Request, res: express.Response) {
+    static redirectLogin(req: express.Request, res: express.Response) {
         if (req.query.redirect) {
             let redirect = `${req.query.redirect}`
             if (!redirect.startsWith('/')) {

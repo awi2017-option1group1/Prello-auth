@@ -1,4 +1,3 @@
-import { ClientFacade } from './bl/clientFacade'
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
@@ -8,6 +7,8 @@ import  { connectionOptions } from './connectionParams'
 
 import { authenticateMiddleware } from './oauthMiddlewares'
 
+import { CallbackController } from './routes/callback'
+import { GithubController } from './routes/github'
 import { LoginController } from './routes/login'
 import { OauthController } from './routes/oauth'
 import { UserController } from './routes/user'
@@ -34,16 +35,20 @@ app.get('/', (req, res) => {
     })
 })
 
-app.get('/test', async (req, res) => {  
-    const obj = await ClientFacade.getById('e70919f4-b7f3-466b-b326-9faa7f7290f0')
-    res.json({ obj })
-})
-
 app.get('/login', LoginController.getLogin)
 app.post('/login', LoginController.postLogin)
 app.get('/logout', LoginController.getLogout)
 
+app.get('/github', GithubController.getGithubCallback)
+app.get('/github/callback', GithubController.getGithubLoginCallback)
+
 app.get('/tokens', authenticateMiddleware, UserController.getTokens)
+// app.get('/tokens', authenticateMiddleware, UserController.getTokens) get data about the requester
+// app.delete('/users/tokens/:clientId', LoginController.getLogin) revoke the token
+
+app.get('/token/zendesk', CallbackController.getZendeskToken)
+app.get('/token/webapp', CallbackController.getWebAppToken)
+app.get('/token/electron', CallbackController.getElectronToken)
 
 app.get('/oauth/authorize', ensureLogin(), OauthController.getAuthorize)
 app.post('/oauth/authorize', ensureLogin(), OauthController.postAuthorize)
