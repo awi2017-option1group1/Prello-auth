@@ -1,7 +1,6 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
-import * as url from 'url'
 
 import { createConnection } from 'typeorm'
 import  { connectionOptions } from './connectionParams'
@@ -17,13 +16,14 @@ import { UserController } from './routes/user'
 import passport, { ensureLogin } from './passport'
 
 export const ENV = process.env.NODE_ENV || 'development'
+export const HOSTS = {
+    'development': 'http://localhost/auth',
+    'production': 'https://photon.igpolytech.fr/auth' 
+}
+export let HOST = HOSTS[ENV]
 
 export const fullUrl = (req: express.Request) => {
-    return url.format({
-        protocol: req.protocol,
-        host: req.get('host'),
-        pathname: `/auth${req.originalUrl}`
-    })
+    return `${HOST}${req.originalUrl}`
 }
 
 // Set up Express and Oauth2-Node
