@@ -1,0 +1,103 @@
+version: 2
+
+references:
+  container_config: &container_config
+    docker:
+      - image: circleci/node:8.3
+    working_directory: ~/app
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - v1-repo-{{ .Branch }}-{{ .Revision }}
+        - v1-repo-{{ .Branch }}
+        - v1-repo
+
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      keys:
+        - dependency-cache-{{ checksum "package.json" }}
+
+jobs:
+  checkout_code:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - .
+
+  build:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: npm install
+          command: npm install --dev
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+  tests:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Unit tests
+          command: npm test
+
+  tests_linting:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Linting tests
+          command: npm run tslint
+
+  deploy:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Prepare build
+          command: npm run build
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
+      - run:
+          name: Deploy on Heroku
+          command: |
+            git add -f dist
+            git commit -m "Add dist folder"
+            git push -f heroku master
+            sleep 5 # sleep for 5 seconds to wait for dynos
+            heroku restart
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - checkout_code
+      - build:
+          requires:
+            - checkout_code
+      - tests:
+          requires:
+            - build
+      - tests_linting:
+          requires:
+            - build
+      - deploy:
+          filters:
+            branches:
+              only: master
+          requires:
+            - tests
+            - tests_linting
