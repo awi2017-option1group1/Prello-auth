@@ -1,26 +1,28 @@
-# Prello-back
-Prello's back-end application.
+# Prello-auth
+Prello's authentification application.
 
-[![CircleCI](https://circleci.com/gh/awi2017-option1group1/Prello-back/tree/master.svg?style=svg)](https://circleci.com/gh/awi2017-option1group1/Prello-back/tree/master)
+[![CircleCI](https://circleci.com/gh/awi2017-option1group1/Prello-auth/tree/master.svg?style=svg)](https://circleci.com/gh/awi2017-option1group1/Prello-auth/tree/master)
 
 - - - - - - - - -
 
 ## Installation
 
+Before installing Prello-auth, you need to have Prello-back installed.
+
 - Clone the github repository. 
 
-    `git clone https://github.com/awi2017-option1group1/Prello-back `
+    `git clone https://github.com/awi2017-option1group1/Prello-auth`
 - Install the dependencies for development mode 
 
 	`npm install`
-- Setup PostgreSQL connexion variables in `src/connectionParams.ts`.   
+- Update the Prello db schema with the script `schema.sql`.   
 
 ## Execution
 
-- To run the application in development mode (need the back-end up and running) 
+- To run the application in development mode 
 
     `npm run start:dev`
-- To run the application in production mode (need the back-end up and running) 
+- To run the application in production mode
 
 	`npm run build && npm start`
 - To run the tests
