@@ -12,7 +12,6 @@ interface UserData {
 
 export const login = async (user: UserData, res: express.Response) => {
     const token = await UserFacade.authenticate(user.id)
-
     res.cookie(config.loginCookieName, token, { 
         httpOnly: true, 
         sameSite: true, 
