@@ -12,7 +12,7 @@
     "node": "8.3.0"
   },
   "scripts": {
-    "start": "node dist/src/server.js",
+    "start": "node dist/server.js",
     "start:dev": "npm run build && npm run watch",
     "build": "npm run build-ts && npm run tslint && npm run copy-static-assets",
     "copy-static-assets": "node copyStaticAssets.js",
@@ -21,11 +21,7 @@
     "test": "jest --forceExit",
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
-    "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "build-ts:prod": "./node_modules/typescript/bin/tsc -p tsconfig.json",
-    "tslint:prod": "./node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json",
-    "build:prod": "npm run build-ts:prod && npm run tslint:prod && npm run copy-static-assets",
-    "postinstall": "npm run build:prod"
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "jest": {
     "globals": {
