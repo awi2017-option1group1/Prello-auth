@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { config } from '../config'
-import { fullUrlFromReq } from '../util/url'
+import { fullUrlFromReq, fullUrlFromString, AUTH_HOST } from '../util/url'
 
 import { login } from '../util/login'
 
@@ -20,9 +20,10 @@ export class LoginController {
         }
 
         return res.render('login', { // views: login
-            redirect_uri: fullUrlFromReq(req),
+            redirect_uri: fullUrlFromReq(req, AUTH_HOST),
             email: '',
-            errors
+            errors,
+            github_login_url: fullUrlFromString('/github', AUTH_HOST)
         })
     }
 
@@ -33,9 +34,10 @@ export class LoginController {
             return LoginController.redirectLogin(req, res)
         } else {
             return res.render('login', { // views: login
-                redirect_uri: fullUrlFromReq(req),
+                redirect_uri: fullUrlFromReq(req, AUTH_HOST),
                 email: req.body.email || '',
-                errors: ['Invalid credentials']
+                errors: ['Invalid credentials'],
+                github_login_url: fullUrlFromString('/github', AUTH_HOST)
             })
         }
     }
@@ -60,7 +62,7 @@ export class LoginController {
                 return res.redirect(redirect)
             }
         } else {
-            return res.redirect(config.loginDefaultRedirect)
+            return res.redirect(`/${config.loginDefaultRedirect}`)
         }
     }
 

@@ -1,20 +1,52 @@
-export const config = {
-    loginCookieName: 'photon',
-    loginDefaultRedirect: '/overview',
+import { ConnectionOptions } from 'typeorm'
+
+export interface GithubConfig {
+    clientID: string
+    clientSecret: string
+    callbackURL: string
+    userAgent: string
+}
+
+export interface ServerConfig {
+    host: string
+    port: number
+    apiSuffix: string
+    authSuffix: string
+}
+
+export interface Config {
+    loginCookieName: string
+    loginDefaultRedirect: string
+
+    env: 'development' | 'production' | 'test'
+
+    github: GithubConfig
+    server: ServerConfig
+    database: ConnectionOptions
+}
+
+export const config: Config = {
+    loginCookieName: process.env.LOGIN_COOKIE_NAME,
+    loginDefaultRedirect: process.env.LOGIN_DEFAULT_REDIRECT,
+
+    env: process.env.NODE_ENV,
 
     github: {
-        clientID: process.env.GITHUB_CLIENT_ID || '8515ee45647519a537bd',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || '9399ae2120cab4a95d1890de32a8c64ab82dc19a',
-        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:8000/github/callback',
-        userAgent: process.env.GITHUB_USER_AGENT || 'Prello-dev'
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
+        userAgent: process.env.GITHUB_CLIENT_NAME
     },
 
-    serverUrl: {
-        'development': 'http://localhost',
-        'production': 'https://photon.igpolytech.fr'
+    server: {
+        host: process.env.HOST,
+        port: process.env.PORT,
+        apiSuffix: process.env.API_SUFFIX,
+        authSuffix: process.env.AUTH_SUFFIX
     },
-    serverSuffixes: {
-        'api': '/api',
-        'auth': '/auth'
+
+    database: {
+        type: process.env.DATABASE_TYPE,
+        url: process.env.DATABASE_URL
     }
 }

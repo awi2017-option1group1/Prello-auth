@@ -1,7 +1,7 @@
 import * as passport from 'passport'
 
 import { config } from '../config'
-import { fullUrlFromString } from './url'
+import { fullUrlFromString, AUTH_HOST } from './url'
 
 import { UserFacade } from '../bl/userFacade'
 
@@ -26,7 +26,7 @@ export const ensureLogin = () => (req, res, next) => {
                 &state=${req.query.state}`               
             }
             return res.redirect(
-                fullUrlFromString(`/login?redirect=${req.path}${query}`)
+                fullUrlFromString(`/login?redirect=${req.path}${query}`, AUTH_HOST)
             )
         } else {
             req.user = user

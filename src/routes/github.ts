@@ -5,7 +5,7 @@ import { config } from '../config'
 
 import { GithubService } from '../util/oauth'
 import { login } from '../util/login'
-import { fullUrlFromString, API_HOST } from '../util/url'
+import { fullUrlFromString, API_HOST, AUTH_HOST } from '../util/url'
 
 import { LoginController } from './login'
 import { UserFacade } from '../bl/userFacade'
@@ -35,7 +35,7 @@ export class GithubController {
         const code = req.query.code
         GithubService.getOAuthAccessToken(code, {}, async (tokenErr, accessToken, refreshToken) => {
             if (tokenErr || !accessToken) {
-                res.redirect(fullUrlFromString('/login?oauth_error=Github'))
+                res.redirect(fullUrlFromString('/login?oauth_error=Github', AUTH_HOST))
             }
 
             try {
@@ -55,7 +55,7 @@ export class GithubController {
                 return LoginController.redirectLogin(req, res)
             } catch (e) {
                 console.log(e)
-                res.redirect(fullUrlFromString('/login?oauth_error=Github'))
+                res.redirect(fullUrlFromString('/login?oauth_error=Github', AUTH_HOST))
             }
             res.end()
         })

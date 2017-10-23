@@ -3,7 +3,9 @@ import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
 
 import { createConnection } from 'typeorm'
-import  { connectionOptions } from './connectionParams'
+import  { fromConfig } from './database'
+
+import { config } from './config'
 
 import { authenticateMiddleware } from './util/oauthMiddlewares'
 
@@ -15,11 +17,11 @@ import { UserController } from './routes/user'
 
 import passport, { ensureLogin } from './util/passport'
 
-export const ENV = process.env.NODE_ENV || 'development'
+console.log(config)
 
 // Set up Express and Oauth2-Node
 const app = express()
-app.set('port', process.env.PORT || 8000) 
+app.set('port', config.server.port) 
 app.engine('ejs', require('ejs-locals'))
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'ejs')
@@ -30,9 +32,7 @@ app.use(passport.initialize())
 
 // Define routes
 app.get('/', (req, res) => {  
-    res.json({
-        status: 'My API is alive!'
-    })
+    res.json({ healthcheck: 'ok' })
 })
 
 app.get('/login', LoginController.getLogin)
@@ -54,7 +54,7 @@ app.get('/oauth/authorize', ensureLogin(), OauthController.getAuthorize)
 app.post('/oauth/authorize', ensureLogin(), OauthController.postAuthorize)
 app.post('/oauth/token', OauthController.postToken)
 
-createConnection(connectionOptions[ENV]).then(connection => {
+createConnection(fromConfig()).then(connection => {
     app.listen(app.get('port'), () => {
         console.log(('App is running at http://localhost:%d in %s mode'), app.get('port'), app.get('env'))
         console.log('Press CTRL-C to stop\n')
