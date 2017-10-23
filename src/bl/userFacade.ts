@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm'
 import { v4 as uuid } from 'uuid'
 
-import { OAuth2User } from '../db/User'
+import { OAuth2User } from '../entities/User'
 
 export class UserFacade {
 

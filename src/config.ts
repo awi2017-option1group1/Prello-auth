@@ -1,5 +1,5 @@
 export const config = {
-    loginCookieName: 'prello-auth',
+    loginCookieName: 'photon',
     loginDefaultRedirect: '/overview',
 
     github: {
@@ -7,5 +7,14 @@ export const config = {
         clientSecret: process.env.GITHUB_CLIENT_SECRET || '9399ae2120cab4a95d1890de32a8c64ab82dc19a',
         callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:8000/github/callback',
         userAgent: process.env.GITHUB_USER_AGENT || 'Prello-dev'
+    },
+
+    serverUrl: {
+        'development': 'http://localhost',
+        'production': 'https://photon.igpolytech.fr'
+    },
+    serverSuffixes: {
+        'api': '/api',
+        'auth': '/auth'
     }
 }

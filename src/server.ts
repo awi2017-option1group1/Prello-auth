@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser'
 import { createConnection } from 'typeorm'
 import  { connectionOptions } from './connectionParams'
 
-import { authenticateMiddleware } from './oauthMiddlewares'
+import { authenticateMiddleware } from './util/oauthMiddlewares'
 
 import { CallbackController } from './routes/callback'
 import { GithubController } from './routes/github'
@@ -13,18 +13,9 @@ import { LoginController } from './routes/login'
 import { OauthController } from './routes/oauth'
 import { UserController } from './routes/user'
 
-import passport, { ensureLogin } from './passport'
+import passport, { ensureLogin } from './util/passport'
 
 export const ENV = process.env.NODE_ENV || 'development'
-export const HOSTS = {
-    'development': 'http://localhost/auth',
-    'production': 'https://photon.igpolytech.fr/auth' 
-}
-export let HOST = HOSTS[ENV]
-
-export const fullUrl = (req: express.Request) => {
-    return `${HOST}${req.originalUrl}`
-}
 
 // Set up Express and Oauth2-Node
 const app = express()
@@ -51,6 +42,7 @@ app.get('/logout', LoginController.getLogout)
 app.get('/github', GithubController.getGithubLogin)
 app.get('/github/callback', GithubController.getGithubLoginCallback)
 
+app.get('/me', ensureLogin(), UserController.getMe)
 app.get('/tokens', authenticateMiddleware, UserController.getTokens)
 // app.get('/tokens', authenticateMiddleware, UserController.getTokens) get data about the requester
 // app.delete('/users/tokens/:clientId', LoginController.getLogin) revoke the token

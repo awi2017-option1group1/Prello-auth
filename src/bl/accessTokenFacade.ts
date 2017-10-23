@@ -2,9 +2,9 @@ import { getRepository } from 'typeorm'
 
 import { Token } from 'oauth2-server'
 
-import { OAuth2AccessToken } from '../db/AccessToken'
-import { OAuth2Client } from '../db/Client'
-import { OAuth2User } from '../db/User'
+import { OAuth2AccessToken } from '../entities/AccessToken'
+import { OAuth2Client } from '../entities/Client'
+import { OAuth2User } from '../entities/User'
 
 export class AccessTokenFacade {
 

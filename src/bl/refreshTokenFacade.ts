@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm'
 
-import { OAuth2RefreshToken } from '../db/RefreshToken'
+import { OAuth2RefreshToken } from '../entities/RefreshToken'
 
 export class RefreshTokenFacade {
 

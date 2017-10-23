@@ -3,11 +3,13 @@ import * as rq from 'request'
 
 import { config } from '../config'
 
-import { GithubService } from '../oauth'
-import { login } from '../login'
+import { GithubService } from '../util/oauth'
+import { login } from '../util/login'
+import { fullUrlFromString, API_HOST } from '../util/url'
 
 import { LoginController } from './login'
 import { UserFacade } from '../bl/userFacade'
+import { OAuth2User } from '../entities/User'
 
 interface GithubProfile {
     login: string
@@ -33,7 +35,7 @@ export class GithubController {
         const code = req.query.code
         GithubService.getOAuthAccessToken(code, {}, async (tokenErr, accessToken, refreshToken) => {
             if (tokenErr || !accessToken) {
-                res.redirect('../login?oauth_error=Github')
+                res.redirect(fullUrlFromString('/login?oauth_error=Github'))
             }
 
             try {
@@ -43,26 +45,43 @@ export class GithubController {
                 ])
                 const primaryEmail = emails[0].email
 
-                const user = await UserFacade.getByEmail(primaryEmail)
+                let user = await UserFacade.getByEmail(primaryEmail)
 
                 if (!user) {
-                    // TODO: create it
-                    console.log(profile)
+                    user = await GithubController.createUser(primaryEmail, profile.login)
                 }
 
-                await login(
-                    {
-                        id: user!.uid,
-                        email: primaryEmail
-                    }, 
-                    res
-                )
+                await login(user!.uid, res)
                 return LoginController.redirectLogin(req, res)
             } catch (e) {
-                res.redirect('../login?oauth_error=Github')
+                console.log(e)
+                res.redirect(fullUrlFromString('/login?oauth_error=Github'))
             }
             res.end()
         })
+    }
+
+    private static createUser(email: string, username: string): Promise<OAuth2User> {
+        return new Promise((resolve, reject) => {
+            rq.post(
+                fullUrlFromString('/register', API_HOST), 
+                {
+                    body: {
+                        email,
+                        username
+                    }
+                },
+                (reqErr, response, body) => {
+                    if (reqErr) {
+                        reject(reqErr)
+                    } else {
+                        const userData = JSON.parse(body)
+                        userData.uid = userData.id
+                        resolve(userData)
+                    }
+                }
+            )
+        }) 
     }
 
     private static getUserProfile(accessToken: string): Promise<GithubProfile> {

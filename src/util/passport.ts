@@ -1,8 +1,9 @@
 import * as passport from 'passport'
 
-import { config } from './config'
+import { config } from '../config'
+import { fullUrlFromString } from './url'
 
-import { UserFacade } from './bl/userFacade'
+import { UserFacade } from '../bl/userFacade'
 
 const CookieStrategy = require('passport-cookie').Strategy
 passport.use(new CookieStrategy({ cookieName: config.loginCookieName }, (token, done) => {
@@ -25,7 +26,7 @@ export const ensureLogin = () => (req, res, next) => {
                 &state=${req.query.state}`               
             }
             return res.redirect(
-                `/login?redirect=${req.path}${query}`
+                fullUrlFromString(`/login?redirect=${req.path}${query}`)
             )
         } else {
             req.user = user

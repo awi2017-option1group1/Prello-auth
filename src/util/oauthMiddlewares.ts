@@ -1,8 +1,8 @@
 import * as Oauth2Server from 'oauth2-server'
 
-import { AccessTokenFacade } from './bl/accessTokenFacade'
-import { AuthorizationCodeFacade } from './bl/authorizationCodeFacade'
-import { ClientFacade } from './bl/clientFacade'
+import { AccessTokenFacade } from '../bl/accessTokenFacade'
+import { AuthorizationCodeFacade } from '../bl/authorizationCodeFacade'
+import { ClientFacade } from '../bl/clientFacade'
 
 const model = {
     getAuthorizationCode: AuthorizationCodeFacade.getById,

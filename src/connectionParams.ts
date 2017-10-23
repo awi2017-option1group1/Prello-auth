@@ -15,14 +15,14 @@ export const connectionOptions: MultipleConnections = {
         logging: ['query', 'error'],
         synchronize: false,
         entities: [
-            `${__dirname}/db/*.js`
+            `${__dirname}/entities/*.js`
         ],
     },
     'production': {
         type: 'postgres',
         url: process.env.DATABASE_URL,
         entities: [
-            `${__dirname}/db/*.js`
+            `${__dirname}/entities/*.js`
         ],
     }
 }

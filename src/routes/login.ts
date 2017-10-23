@@ -1,9 +1,9 @@
 import * as express from 'express'
 
 import { config } from '../config'
-import { fullUrl } from '../server'
+import { fullUrlFromReq } from '../util/url'
 
-import { login } from '../login'
+import { login } from '../util/login'
 
 import { UserFacade } from '../bl/userFacade'
 
@@ -20,7 +20,7 @@ export class LoginController {
         }
 
         return res.render('login', { // views: login
-            redirect_uri: fullUrl(req),
+            redirect_uri: fullUrlFromReq(req),
             email: '',
             errors
         })
@@ -29,17 +29,11 @@ export class LoginController {
     static async postLogin(req: express.Request, res: express.Response) {
         const user = await UserFacade.getByEmailAndPassword(req.body.email, req.body.password)
         if (user) {
-            await login(
-                {
-                    id: user.uid,
-                    email: user.email
-                },
-                res
-            )
+            await login(user.uid, res)
             return LoginController.redirectLogin(req, res)
         } else {
             return res.render('login', { // views: login
-                redirect_uri: req.originalUrl,
+                redirect_uri: fullUrlFromReq(req),
                 email: req.body.email || '',
                 errors: ['Invalid credentials']
             })

@@ -2,9 +2,9 @@ import { getRepository } from 'typeorm'
 
 import { AuthorizationCode } from 'oauth2-server'
 
-import { OAuth2AuthorizationCode } from '../db/AuthorizationCode'
-import { OAuth2Client } from '../db/Client'
-import { OAuth2User } from '../db/User'
+import { OAuth2AuthorizationCode } from '../entities/AuthorizationCode'
+import { OAuth2Client } from '../entities/Client'
+import { OAuth2User } from '../entities/User'
 
 export class AuthorizationCodeFacade {
 

@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm'
 
-import { OAuth2Client } from '../db/Client'
+import { OAuth2Client } from '../entities/Client'
 
 export class ClientFacade {
 

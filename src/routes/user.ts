@@ -9,4 +9,8 @@ export class UserController {
         return res.json({ tokens })
     }
 
+    static async getMe(req: express.Request, res: express.Response) {
+        return res.json({ me: req.user })
+    }
+
 }
