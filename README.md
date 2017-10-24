@@ -19,7 +19,7 @@ Before installing Prello-auth, you need to have Prello-back installed.
 
 ## Execution
 
-- Complete and update the `.env` file then source it
+- Complete and update the `.env.dev` file then source it
 
     `source .env`
 - To run the application in development mode 
