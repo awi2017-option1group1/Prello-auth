@@ -1,7 +1,7 @@
 /* tslint:disable */
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class RootMigration1508949923263 implements MigrationInterface {
+export class AuthMigration1508949923263 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TABLE "client" ("id" SERIAL NOT NULL, "client_id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "client_secret" uuid NOT NULL DEFAULT uuid_generate_v4(), "redirect_uris" text NOT NULL, "is_trusted" boolean NOT NULL, CONSTRAINT "uk_client_client_id" UNIQUE ("client_id"), PRIMARY KEY("id"))`);

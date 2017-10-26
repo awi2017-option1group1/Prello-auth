@@ -47,6 +47,7 @@ export const config: Config = {
 
     database: {
         type: process.env.DATABASE_TYPE,
+        ssl: process.env.DATABASE_SSL === 'true',
         url: process.env.DATABASE_URL
     }
 }

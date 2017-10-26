@@ -1,5 +1,6 @@
 import { getRepository } from 'typeorm'
 import { v4 as uuid } from 'uuid'
+import { compareSync } from 'bcrypt'
 
 import { OAuth2User } from '../entities/User'
 
@@ -18,10 +19,12 @@ export class UserFacade {
     }
 
     static async getByEmailAndPassword(email: string, password: string) {
-        return await getRepository(OAuth2User).findOne({
-            email,
-            password
-        })
+        const user = await UserFacade.getByEmail(email)
+        if (user && compareSync(password, user.password)) {
+            return user
+        } else {
+            return false
+        }
     }
 
     static async getByToken(token: string) {
