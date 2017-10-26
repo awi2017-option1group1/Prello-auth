@@ -14,8 +14,7 @@ Before installing Prello-auth, you need to have Prello-back installed.
     `git clone https://github.com/awi2017-option1group1/Prello-auth`
 - Install the dependencies for development mode 
 
-	`npm install`
-- Update the Prello db schema with the script `schema.sql`.   
+	`npm install`  
 
 ## Execution
 

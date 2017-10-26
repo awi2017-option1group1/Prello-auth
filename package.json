@@ -40,6 +40,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",

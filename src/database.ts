@@ -8,5 +8,8 @@ export const fromConfig = (): ConnectionOptions => ({
     entities: [
         `${__dirname}/entities/*.js`
     ],
+    migrations: [
+        `${__dirname}/migrations/*.js`
+    ],
     logging: ['query', 'error']
 })
