@@ -8,7 +8,7 @@
         "sourceMap": false,
         "outDir": "dist",
         "allowJs": true,
-        "baseUrl": ".",
+        "baseUrl": "src",
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
