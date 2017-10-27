@@ -13,6 +13,7 @@ import { OauthController } from './routes/oauth'
 import { UserController } from './routes/user'
 
 import passport, { ensureLogin } from './util/passport'
+import { ensureInternal } from './util/internalMiddleware'
 
 export const app = express()
 
@@ -39,6 +40,7 @@ app.get('/github', GithubController.getGithubLogin)
 app.get('/github/callback', GithubController.getGithubLoginCallback)
 
 app.get('/me', ensureLogin(), UserController.getMe)
+app.get('/data/token/:token/:type', ensureInternal(), UserController.getTokenData)
 app.get('/tokens', authenticateMiddleware, UserController.getTokens)
 // app.get('/tokens', authenticateMiddleware, UserController.getTokens) get data about the requester
 // app.delete('/users/tokens/:clientId', LoginController.getLogin) revoke the token

@@ -15,10 +15,11 @@ export interface ServerConfig {
 }
 
 export interface Config {
+    env: 'development' | 'production' | 'test'
+
     loginCookieName: string
     loginDefaultRedirect: string
-
-    env: 'development' | 'production' | 'test'
+    internalToken: string
 
     github: GithubConfig
     server: ServerConfig
@@ -26,10 +27,11 @@ export interface Config {
 }
 
 export const config: Config = {
+    env: process.env.NODE_ENV || 'development',
+    
     loginCookieName: process.env.LOGIN_COOKIE_NAME || 'photon',
     loginDefaultRedirect: process.env.LOGIN_DEFAULT_REDIRECT || 'overview',
-
-    env: process.env.NODE_ENV || 'development',
+    internalToken: process.env.INTERNAL_TOKEN || 'prello123456789',
 
     github: {
         clientID: process.env.GITHUB_CLIENT_ID || '',
