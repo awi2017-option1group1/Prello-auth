@@ -30,10 +30,10 @@ export class OAuth2User {
     password: string
 
     @Column({
-        name: 'pseudo',
+        name: 'username',
         type: 'varchar'
     })
-    pseudo: string
+    username: string
 
     @Column({
         name: 'token',

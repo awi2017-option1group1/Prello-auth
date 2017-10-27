@@ -10,7 +10,13 @@ export class UserController {
     }
 
     static async getMe(req: express.Request, res: express.Response) {
-        return res.json({ me: req.user })
+        return res.json({ 
+            me: {
+                username: req.user.username,
+                email: req.user.email,
+                uid: req.user.uid
+            } 
+        })
     }
 
 }

@@ -46,6 +46,6 @@ app.get('/tokens', authenticateMiddleware, UserController.getTokens)
 app.get('/token/zendesk', CallbackController.getZendeskToken)
 app.get('/token/electron', CallbackController.getElectronToken)
 
-app.get('/oauth/authorize', ensureLogin(), OauthController.getAuthorize)
-app.post('/oauth/authorize', ensureLogin(), OauthController.postAuthorize)
+app.get('/oauth/authorize', ensureLogin({ redirect: true }), OauthController.getAuthorize)
+app.post('/oauth/authorize', ensureLogin({ redirect: true }), OauthController.postAuthorize)
 app.post('/oauth/token', OauthController.postToken)

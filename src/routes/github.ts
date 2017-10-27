@@ -66,6 +66,7 @@ export class GithubController {
             rq.post(
                 fullUrlFromString('/register', API_HOST), 
                 {
+                    json: true,
                     body: {
                         email,
                         username
@@ -75,9 +76,11 @@ export class GithubController {
                     if (reqErr) {
                         reject(reqErr)
                     } else {
-                        const userData = JSON.parse(body)
-                        userData.uid = userData.id
-                        resolve(userData)
+                        if (response.statusCode === 400) {
+                            reject(body)
+                        }
+                        body.uid = body.id
+                        resolve(body)
                     }
                 }
             )

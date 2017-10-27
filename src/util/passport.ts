@@ -15,19 +15,31 @@ passport.use(new CookieStrategy({ cookieName: config.loginCookieName }, (token, 
 
 export default passport
 
-export const ensureLogin = () => (req, res, next) => {
+interface EnsureLoginOptions {
+    redirect?: boolean
+}
+
+const redirectToLogin = (req, res) => {
+    let query = ''
+    if (req.query.client_id && req.query.redirect_uri && req.query.response_type && req.query.state) {
+        query = `&client_id=${req.query.client_id}
+        &redirect_uri=${req.query.redirect_uri}
+        &response_type=${req.query.response_type}
+        &state=${req.query.state}`               
+    }
+    return res.redirect(
+        fullUrlFromString(`/login?redirect=${req.path}${query}`, AUTH_HOST)
+    )
+}
+
+export const ensureLogin = (options?: EnsureLoginOptions) => (req, res, next) => {
     passport.authenticate('cookie', { session: false }, (authErr, user, infos) => {
         if (authErr || !user) {
-            let query = ''
-            if (req.query.client_id && req.query.redirect_uri && req.query.response_type && req.query.state) {
-                query = `&client_id=${req.query.client_id}
-                &redirect_uri=${req.query.redirect_uri}
-                &response_type=${req.query.response_type}
-                &state=${req.query.state}`               
+            if (options && options.redirect) {
+                redirectToLogin(req, res)
+            } else {
+                res.status(401).json({ error: 'Unauthorized' })
             }
-            return res.redirect(
-                fullUrlFromString(`/login?redirect=${req.path}${query}`, AUTH_HOST)
-            )
         } else {
             req.user = user
             next()
