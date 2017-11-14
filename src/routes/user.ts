@@ -44,4 +44,9 @@ export class UserController {
         })
     }
 
+    static async getMyUser(req: express.Request, res: express.Response) {
+        req.user = req.token.user
+        return UserController.getMe(req, res)
+    }
+
 }

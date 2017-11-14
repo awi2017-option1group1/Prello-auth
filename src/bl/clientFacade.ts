@@ -15,7 +15,7 @@ export class ClientFacade {
             return await getRepository(OAuth2Client).findOne({
                 id,
                 clientSecret: secret
-            })           
+            })         
         } else {
             return await ClientFacade.getById(id)
         }

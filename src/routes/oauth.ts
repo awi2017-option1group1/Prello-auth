@@ -39,4 +39,13 @@ export class OauthController {
         return tokenMiddleware(req, res, next)
     }
 
+    static getDone(req: express.Request, res: express.Response) {
+        return res.render('done', { // views: done
+            type: 'authorization_code',
+            code: req.query.code,
+            state: req.query.state,
+            to: req.query.to || '*'
+        })
+    }
+
 }

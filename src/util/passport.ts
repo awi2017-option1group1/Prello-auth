@@ -20,16 +20,14 @@ interface EnsureLoginOptions {
 }
 
 const redirectToLogin = (req, res) => {
-    let query = ''
-    if (req.query.client_id && req.query.redirect_uri && req.query.response_type && req.query.state) {
-        query = `&client_id=${req.query.client_id}
-        &redirect_uri=${req.query.redirect_uri}
-        &response_type=${req.query.response_type}
-        &state=${req.query.state}`               
-    }
-    return res.redirect(
-        fullUrlFromString(`/login?redirect=${req.path}${query}`, AUTH_HOST)
-    )
+    return res
+        .cookie(config.redirectCookieName, `/${config.server.authSuffix}${req.url}`, {
+            httpOnly: true, 
+            sameSite: true, 
+            secure: config.env !== 'development',
+            maxAge: 300000
+        })
+        .redirect(fullUrlFromString(`/login`, AUTH_HOST))
 }
 
 export const ensureLogin = (options?: EnsureLoginOptions) => (req, res, next) => {

@@ -9,7 +9,7 @@
         </h2>
         <form class="ui large form" action="<%= redirect_uri %>" method="post">
             <div class="ui stacked segment">
-                <p>Hi <%= user.pseudo %>!</p>
+                <p>Hi <%= user.username %>!</p>
                 <p><b><%= client.name %></b> is requesting access to your Prello account.</p>
                 <p>Do you approve?</p>
                 <div class="ui two column grid">

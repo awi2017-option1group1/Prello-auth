@@ -27,8 +27,7 @@ export const tokenMiddleware = (req, res, next) => {
 
     oauth.token(request, response)
     .then((token) => {
-        res.set(response.headers)
-        res.json(response.body)
+        res.set(response.headers).json(response.body)
     })
     .catch(err => {
         console.log(err)
@@ -43,9 +42,11 @@ export const authorizeMiddleware = (req, res, next) => {
     const options = {
         authenticateHandler: {
             handle: (data) => {
+                console.log(req.user)
                 return req.user
             }
-        }
+        },
+        allowEmptyState: true
     }
 
     oauth.authorize(request, response, options).then((authorizationCode) => {

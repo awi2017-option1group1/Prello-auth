@@ -14,16 +14,25 @@ export interface ServerConfig {
     authSuffix: string
 }
 
+export interface InternalOAuth {
+    clientId: string
+    clientSecret: string
+    redirectUri: string
+}
+
 export interface Config {
     env: 'development' | 'production' | 'test'
 
     loginCookieName: string
     loginDefaultRedirect: string
     internalToken: string
+    redirectCookieName: string
 
     github: GithubConfig
     server: ServerConfig
     database: ConnectionOptions
+
+    zendesk: InternalOAuth
 }
 
 export const config: Config = {
@@ -32,12 +41,13 @@ export const config: Config = {
     loginCookieName: process.env.LOGIN_COOKIE_NAME || 'photon',
     loginDefaultRedirect: process.env.LOGIN_DEFAULT_REDIRECT || 'overview',
     internalToken: process.env.INTERNAL_TOKEN || 'prello123456789',
+    redirectCookieName: 'redirect',
 
     github: {
-        clientID: process.env.GITHUB_CLIENT_ID || '',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        clientID: process.env.GITHUB_CLIENT_ID || '8515ee45647519a537bd',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '9399ae2120cab4a95d1890de32a8c64ab82dc19a',
         callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost/auth/github/callback',
-        userAgent: process.env.GITHUB_CLIENT_NAME || ''
+        userAgent: process.env.GITHUB_CLIENT_NAME || 'Prello-dev'
     },
 
     server: {
@@ -51,5 +61,11 @@ export const config: Config = {
         type: process.env.DATABASE_TYPE || 'postgres',
         ssl: process.env.DATABASE_SSL === 'true',
         url: process.env.DATABASE_URL || 'postgres://postgres:root@localhost:5434/dev_prello'
+    },
+
+    zendesk: {
+        clientId: process.env.INTERNAL_OAUTH_ZENDESK_CLIENT_ID || '9fc19d15-4a3a-4373-8f50-c1b478a8051b',
+        clientSecret: process.env.INTERNAL_OAUTH_ZENDESK_CLIENT_SECRET || '0927e397-8be8-4216-935b-53e3e4424261',
+        redirectUri: process.env.INTERNAL_OAUTH_ZENDESK_CLIENT_REDIRECT_URI || 'http://localhost:4567/oauth.html',
     }
 }

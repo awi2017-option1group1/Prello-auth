@@ -1,7 +1,9 @@
 /* tslint:disable */
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class AuthMigration1509031102856 implements MigrationInterface {
+import { config } from '../config';
+
+export class AuthMigration1510031568966 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.query(`CREATE TABLE "client" ("id" SERIAL NOT NULL, "client_id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "client_secret" uuid NOT NULL DEFAULT uuid_generate_v4(), "redirect_uris" text NOT NULL, "is_trusted" boolean NOT NULL, CONSTRAINT "uk_client_client_id" UNIQUE ("client_id"), PRIMARY KEY("id"))`);
@@ -17,9 +19,8 @@ export class AuthMigration1509031102856 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "oauth_refresh_token" ADD CONSTRAINT "fk_0a6d55dffdb076166d2e118623f" FOREIGN KEY ("userUid") REFERENCES "user"("id")`);
         await queryRunner.query(`ALTER TABLE "oauth_refresh_token" ADD CONSTRAINT "fk_34362a2bd1b10ca5287e0e7645a" FOREIGN KEY ("clientCid") REFERENCES "client"("id")`);
 
-        await queryRunner.query(`INSERT INTO "client" ("client_id", "name", "redirect_uris", "is_trusted") VALUES ('adfd1753-863a-44f6-b752-05d02bca7e08', 'Prello-WebApp', 'http://localhost/redirect', true)`);
         await queryRunner.query(`INSERT INTO "client" ("client_id", "name", "redirect_uris", "is_trusted") VALUES ('e70919f4-b7f3-466b-b326-9faa7f7290f0', 'Prello-Electron', 'http://localhost/redirect', true)`);
-        await queryRunner.query(`INSERT INTO "client" ("client_id", "name", "redirect_uris", "is_trusted") VALUES ('9fc19d15-4a3a-4373-8f50-c1b478a8051b', 'Prello-Zendesk', 'http://localhost/redirect', false)`);
+        await queryRunner.query(`INSERT INTO "client" ("client_id", "client_secret", "name", "redirect_uris", "is_trusted") VALUES ('${config.zendesk.clientId}', '${config.zendesk.clientSecret}', 'Prello-Zendesk', '${config.zendesk.redirectUri}', false)`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

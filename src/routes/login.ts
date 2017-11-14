@@ -49,18 +49,12 @@ export class LoginController {
     }
 
     static redirectLogin(req: express.Request, res: express.Response) {
-        if (req.query.redirect) {
-            let redirect = `${req.query.redirect}`
+        let redirect =  req.cookies[config.redirectCookieName] || req.query.redirect
+        if (redirect) {
             if (!redirect.startsWith('/')) {
                 redirect = `/${redirect}`
             }
-            if (req.query.client_id && req.query.redirect_uri) {
-                return res.redirect(
-                    `${redirect}?client_id=${req.query.client_id}&redirect_uri=${req.query.redirect_uri}`
-                )
-            } else {
-                return res.redirect(redirect)
-            }
+            return res.clearCookie(config.redirectCookieName).redirect(redirect)
         } else {
             return res.redirect(`/${config.loginDefaultRedirect}`)
         }

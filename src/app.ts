@@ -1,6 +1,7 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser'
 import * as cookieParser from 'cookie-parser'
+import * as cors from 'cors'
 
 import { config } from './config'
 
@@ -40,11 +41,17 @@ app.get('/github', GithubController.getGithubLogin)
 app.get('/github/callback', GithubController.getGithubLoginCallback)
 
 app.get('/me', ensureLogin(), UserController.getMe)
+app.use('/myUser', cors())
+app.get('/myUser', authenticateMiddleware, UserController.getMyUser)
+
 app.get('/data/token/:token/:type', ensureInternal(), UserController.getTokenData)
 app.get('/tokens', authenticateMiddleware, UserController.getTokens)
 // app.get('/tokens', authenticateMiddleware, UserController.getTokens) get data about the requester
 // app.delete('/users/tokens/:clientId', LoginController.getLogin) revoke the token
 
+app.use('/token/zendesk', cors({
+    origin: 'https://d3v-prello.zendesk.com'
+}))
 app.get('/token/zendesk', CallbackController.getZendeskToken)
 app.get('/token/electron', CallbackController.getElectronToken)
 
