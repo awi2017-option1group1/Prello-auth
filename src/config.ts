@@ -44,10 +44,10 @@ export const config: Config = {
     redirectCookieName: 'redirect',
 
     github: {
-        clientID: process.env.GITHUB_CLIENT_ID || '8515ee45647519a537bd',
-        clientSecret: process.env.GITHUB_CLIENT_SECRET || '9399ae2120cab4a95d1890de32a8c64ab82dc19a',
-        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost/auth/github/callback',
-        userAgent: process.env.GITHUB_CLIENT_NAME || 'Prello-dev'
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
+        userAgent: process.env.GITHUB_CLIENT_NAME 
     },
 
     server: {

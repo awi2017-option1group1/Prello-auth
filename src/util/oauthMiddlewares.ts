@@ -42,11 +42,14 @@ export const authorizeMiddleware = (req, res, next) => {
     const options = {
         authenticateHandler: {
             handle: (data) => {
-                console.log(req.user)
                 return req.user
             }
         },
         allowEmptyState: true
+    }
+
+    if (req.body.cancel) {
+        return res.redirect(req.query.redirect_uri)
     }
 
     oauth.authorize(request, response, options).then((authorizationCode) => {

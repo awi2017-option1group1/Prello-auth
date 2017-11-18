@@ -19,6 +19,10 @@ export class LoginController {
             errors.push(`Error during ${req.query.oauth_error} authentication process`)
         }
 
+        if (req.query.redirect) {
+            res.cookie(config.redirectCookieName, req.query.redirect)
+        }
+
         return res.render('login', { // views: login
             redirect_uri: fullUrlFromReq(req, AUTH_HOST),
             email: '',
@@ -29,14 +33,14 @@ export class LoginController {
 
     static async postLogin(req: express.Request, res: express.Response) {
         const user = await UserFacade.getByEmailAndPassword(req.body.email, req.body.password)
-        if (user) {
+        if (user && user.confirmed) {
             await login(user.uid, res)
             return LoginController.redirectLogin(req, res)
         } else {
             return res.render('login', { // views: login
                 redirect_uri: fullUrlFromReq(req, AUTH_HOST),
                 email: req.body.email || '',
-                errors: ['Invalid credentials'],
+                errors: ['Invalid credentials or not confirmed account'],
                 github_login_url: fullUrlFromString('/github', AUTH_HOST)
             })
         }

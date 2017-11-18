@@ -39,7 +39,8 @@ export class UserController {
             me: {
                 username: req.user.username,
                 email: req.user.email,
-                uid: req.user.uid
+                uid: req.user.uid,
+                avatarColor: req.user.avatarColor
             } 
         })
     }

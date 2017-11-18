@@ -25,7 +25,8 @@ export class OAuth2User {
 
     @Column({
         name: 'password',
-        type: 'varchar'
+        type: 'varchar',
+        select: false
     })
     password: string
 
@@ -34,6 +35,17 @@ export class OAuth2User {
         type: 'varchar'
     })
     username: string
+
+    @Column({
+        type: 'varchar'
+    })
+    avatarColor: string
+
+    @Column({
+        type: 'boolean',
+        default: false
+    })
+    confirmed: boolean
 
     @Column({
         name: 'token',
