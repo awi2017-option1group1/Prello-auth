@@ -25,8 +25,7 @@ export class OAuth2User {
 
     @Column({
         name: 'password',
-        type: 'varchar',
-        select: false
+        type: 'varchar'
     })
     password: string
 
