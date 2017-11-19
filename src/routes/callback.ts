@@ -17,7 +17,12 @@ export class CallbackController {
     }
 
     static async getElectronToken(req: express.Request, res: express.Response) {
-        return
+        try {
+            const token = await CallbackController.retrieveAccessToken(req.query.code, config.electron)
+            return res.status(200).json(token)
+        } catch (e) {
+            return res.status(400).json({ error: e })
+        }
     }
 
     private static retrieveAccessToken(code: string, client: InternalOAuth): Promise<{}> {

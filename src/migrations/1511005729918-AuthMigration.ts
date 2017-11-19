@@ -19,7 +19,7 @@ export class AuthMigration1511005729918 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "oauth_refresh_token" ADD CONSTRAINT "fk_0a6d55dffdb076166d2e118623f" FOREIGN KEY ("userUid") REFERENCES "user"("id")`);
         await queryRunner.query(`ALTER TABLE "oauth_refresh_token" ADD CONSTRAINT "fk_34362a2bd1b10ca5287e0e7645a" FOREIGN KEY ("clientCid") REFERENCES "client"("id")`);
 
-        await queryRunner.query(`INSERT INTO "client" ("client_id", "name", "redirect_uris", "is_trusted") VALUES ('e70919f4-b7f3-466b-b326-9faa7f7290f0', 'Prello-Electron', 'http://localhost/redirect', true)`);
+        await queryRunner.query(`INSERT INTO "client" ("client_id", "client_secret", "name", "redirect_uris", "is_trusted") VALUES ('${config.electron.clientId}', '${config.electron.clientSecret}', 'Prello-Electron', '${config.electron.redirectUri}', true)`);
         await queryRunner.query(`INSERT INTO "client" ("client_id", "client_secret", "name", "redirect_uris", "is_trusted") VALUES ('${config.zendesk.clientId}', '${config.zendesk.clientSecret}', 'Prello-Zendesk', '${config.zendesk.redirectUri}', false)`);
     }
 

@@ -53,6 +53,9 @@ app.use('/token/zendesk', cors({
     origin: 'https://d3v-prello.zendesk.com'
 }))
 app.get('/token/zendesk', CallbackController.getZendeskToken)
+app.use('/token/electron', cors({
+    origin: 'http://localhost:3000'
+}))
 app.get('/token/electron', CallbackController.getElectronToken)
 
 app.get('/oauth/authorize', ensureLogin({ redirect: true }), OauthController.getAuthorize)
