@@ -44,10 +44,10 @@ export const config: Config = {
     redirectCookieName: 'redirect',
 
     github: {
-        clientID: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: process.env.GITHUB_CALLBACK_URL,
-        userAgent: process.env.GITHUB_CLIENT_NAME 
+        clientID: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+        callbackURL: process.env.GITHUB_CALLBACK_URL || '',
+        userAgent: process.env.GITHUB_CLIENT_NAME || ''
     },
 
     server: {
